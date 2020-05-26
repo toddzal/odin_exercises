@@ -1,7 +1,7 @@
 def get_word
     lines = File.readlines "5desk.txt"
     x = lines.select {|val| val.length > 4 && val.length <13}
-    return x.sample
+    return x.sample.downcase
   end
   
   def show_game (arr)
@@ -31,7 +31,11 @@ end
   
   def handle_guess
     puts "\nType your guess below?\n"
-    guess = gets.chomp
+    guess = gets.chomp.downcase[0]
+    if guess.match(/[a-zA-Z]/)==nil
+      puts "You can only guess letters\nTry guessing again."
+      handle_guess
+    end
     if $myWord.include? guess
       $boardArr.each.with_index do |val, indx|
         if val[2] == guess
@@ -44,8 +48,18 @@ end
     show_game($boardArr)
     show_guess($guess_arr)
     if $guess_arr.length == 6
-      $game_over == true
-      puts "\n Game over!!! You Lose!"
+      $game_over = true
+      puts "\nGame over!!! You Lose!\n"
+      puts "The word was #{$myWord}"
+    end
+    correct_char = 0
+    $boardArr.each.with_index do |val, indx|
+      correct_char += val[0]
+    end
+    if correct_char == $boardArr.length
+      $game_over = true
+      puts "\n Game over!!! You Win!\n"
+      puts "The word was #{$myWord}"
     end
   end
 
