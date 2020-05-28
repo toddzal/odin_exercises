@@ -4,10 +4,10 @@ class LinkedList
         @tail = nil       
     end
     def head
-        return @head
+        return @head.value
     end
     def tail
-        return @tail
+        return @tail.value
     end
     def at(num)
         counter = 1
@@ -64,12 +64,64 @@ class LinkedList
         return counter
     end
     def pop 
+        node = @head
+        if !@head #No Head
+            puts "List is empty "
+            return 
+        elsif @head == @tail
+            @head = nil
+            @tail = nil
+        else #Head exists
+            while (node = node.next_node)
+                if node.next_node.next_node == nil
+                    node.next_node = nil
+                end
+            end
+        end
     end
-    def contains?
+    def contains?(val)
+        node = @head
+        if !@head #No Head
+            return false
+        elsif val == @head.value
+            return true
+        else #Head exists
+            while (node = node.next_node)
+                if node.value == val
+                    return true
+                end
+            end
+        end
+        return false
     end
-    def find
+    def find(val)
+        counter = 1
+        node = @head
+        if !@head #No Head
+            return nil
+        elsif val == @head.value
+            return 1
+        else #Head exists
+            while (node = node.next_node)
+                if node.value == val
+                    return counter
+                end
+                counter += 1
+            end
+        end
+        return nil
     end
     def to_s
+        catcher = " ( #{@head.value} ) -> "
+        node = @head
+        if !@head #No Head
+            return "Empty List"
+        else #Head exists
+            while (node = node.next_node)
+                catcher += "( #{node.value} ) -> "
+            end
+        end
+        return catcher += "nil"
     end
 
 end
@@ -89,5 +141,13 @@ list.append(20)
 list.prepend(5)
 list.prepend(3)
 list.prepend(4)
-p list.at(3)
-p list.size
+puts "Val at index 3 is " + list.at(3).to_s
+puts "Size is " + list.size.to_s
+puts "the head is " + list.head.to_s
+puts "the tail is " + list.tail.to_s
+puts "Contains the number 20: #{list.contains?(20)}"
+puts "Contains the Character 'X': #{list.contains?("X")}"
+puts "At what index is the value 10 found: #{list.find(10)}"
+puts list.to_s
+list.pop
+puts list.to_s
